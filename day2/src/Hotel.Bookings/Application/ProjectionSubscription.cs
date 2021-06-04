@@ -12,14 +12,16 @@ namespace Hotel.Bookings.Application {
             ICheckpointStore           checkpointStore,
             IEnumerable<IEventHandler> eventHandlers,
             IEventSerializer           eventSerializer,
-            ILoggerFactory             loggerFactory
+            ILoggerFactory             loggerFactory,
+            ISubscriptionGapMeasure subscriptionGapMeasure
         ) : base(
             eventStoreClient,
             Id,
             checkpointStore,
             eventHandlers,
             eventSerializer,
-            loggerFactory
+            loggerFactory,
+            measure: subscriptionGapMeasure
         ) { }
         
         public const string Id = "BookingProjections";

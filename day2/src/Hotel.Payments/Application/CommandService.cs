@@ -11,13 +11,14 @@ namespace Hotel.Payments.Application {
                     cmd.BookingId,
                     cmd.Amount,
                     cmd.Method, 
-                    cmd.Provider
+                    cmd.Provider,
+                    cmd.Currency
                 )
             );
         }
     }
 
     public static class PaymentCommands {
-        public record RecordPayment(string PaymentId, string BookingId, float Amount, string Method, string Provider);
+        public record RecordPayment(string PaymentId, string BookingId, float Amount, string Currency, string Method, string Provider);
     }
 }

@@ -3,6 +3,7 @@ using Eventuous;
 using Eventuous.EventStoreDB;
 using Eventuous.Projections.MongoDB;
 using Eventuous.Subscriptions;
+using Hotel.Bookings.Acls;
 using Hotel.Bookings.Application;
 using Hotel.Bookings.Application.Bookings;
 using Hotel.Bookings.Domain;
@@ -22,6 +23,7 @@ namespace Hotel.Bookings {
 
         public void ConfigureServices(IServiceCollection services) {
             BookingEvents.MapEvents();
+            PaymentIntegrationEvents.MapEvents();
             
             // Infrastructure
             services.AddSingleton(
@@ -46,7 +48,8 @@ namespace Hotel.Bookings {
             // Projections
             services.AddSubscription<ProjectionSubscription>()
                 .AddEventHandler<BookingStateProjection>();
-            
+
+            services.AddSingleton<ISubscriptionGapMeasure, SubscriptionGapMeasure>();
             
             // API
             services.AddControllers();

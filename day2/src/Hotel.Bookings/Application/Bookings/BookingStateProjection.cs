@@ -25,6 +25,8 @@ namespace Hotel.Bookings.Application.Bookings {
                         .Set(x => x.BookingPrice, e.BookingPrice)
                         .Set(x => x.Outstanding, e.OutstandingAmount)
                 ),
+                V1.PaymentRecorded e => UpdateOperationTask(e.BookingId, update => update.Set(x => x.Outstanding, e.Outstanding)),
+                V1.BookingFullyPaid e => UpdateOperationTask(e.BookingId, update => update.Set(x => x.Paid, true)),
                 _ => NoOp
             };
         }

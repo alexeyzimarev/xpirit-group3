@@ -47,6 +47,8 @@ namespace Hotel.Bookings.Domain.Bookings {
         ) {
             EnsureExists();
 
+            if (State.HasPaymentBeenRecorded(paymentId)) return;
+            
             var outstanding = State.Outstanding - paid;
 
             Apply(

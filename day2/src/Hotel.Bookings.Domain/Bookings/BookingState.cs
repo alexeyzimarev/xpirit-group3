@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Linq;
 using Eventuous;
 using static Hotel.Bookings.Domain.Bookings.BookingEvents;
 
@@ -9,6 +11,10 @@ namespace Hotel.Bookings.Domain.Bookings {
         public Money      Price       { get; init; }
         public Money      Outstanding { get; init; }
         public bool       Paid        { get; init; }
+        
+        public ImmutableList<PaymentRecord> PaymentRecords { get; init; } = ImmutableList<PaymentRecord>.Empty;
+
+        internal bool HasPaymentBeenRecorded(string paymentId) => PaymentRecords.Any(x => x.PaymentId == paymentId);
 
         public override BookingState When(object evt) {
             return evt switch {
@@ -21,7 +27,8 @@ namespace Hotel.Bookings.Domain.Bookings {
                     Outstanding = new Money {Amount = booked.OutstandingAmount, Currency = booked.Currency}
                 },
                 V1.PaymentRecorded e => this with {
-                    Outstanding = new Money {Amount = e.Outstanding, Currency = e.Currency}
+                    Outstanding = new Money {Amount = e.Outstanding, Currency = e.Currency},
+                    PaymentRecords = PaymentRecords.Add(new PaymentRecord(e.PaymentId, new Money{Amount = e.PaidAmount, Currency = e.Currency}))
                 },
                 V1.BookingFullyPaid => this with {Paid = true},
                 _                   => this

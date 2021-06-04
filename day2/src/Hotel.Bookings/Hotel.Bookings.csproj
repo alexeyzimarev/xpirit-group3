@@ -19,8 +19,4 @@
         <ProjectReference Include="..\Hotel.Bookings.Domain\Hotel.Bookings.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Acls" />
-    </ItemGroup>
-
 </Project>
